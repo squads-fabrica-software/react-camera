@@ -19,4 +19,5 @@ export interface CameraOptions {
   idealFacingMode?: FacingModes;
   onCameraStart?: (mediaStream: MediaStream) => void;
   onCameraError?: (error: Error) => void;
+  onScreenshot?: (screenshotBase64: string | Error) => void;
 }

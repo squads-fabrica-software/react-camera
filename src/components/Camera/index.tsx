@@ -1,10 +1,20 @@
 import React, { useEffect, useRef } from "react";
 import CameraService from "../../services/CameraService";
 import { CameraOptions } from "./types";
-import { Container, Wrapper, Video, globalStyles } from "./styles";
+import {
+  Container,
+  Wrapper,
+  Video,
+  Canvas,
+  Button,
+  globalStyles,
+} from "./styles";
 
 const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
+  const containerRef = useRef<HTMLDivElement>(null);
   const videoPlayerRef = useRef<HTMLVideoElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const {
     playerWidth,
@@ -14,6 +24,7 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
     cropToFit,
     onCameraStart,
     onCameraError,
+    onScreenshot,
   } = props;
 
   const CameraServiceInstance = new CameraService();
@@ -42,6 +53,19 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
     initializeCamera();
   }, [videoPlayerRef.current]);
 
+  const handleTakeScreenshot = () => {
+    if (onScreenshot) {
+      const screenshot = CameraServiceInstance.takeScreenshot(
+        videoPlayerRef,
+        containerRef,
+        canvasRef,
+        cropToFit
+      );
+
+      return onScreenshot(screenshot);
+    }
+  };
+
   return (
     <>
       <Container
@@ -49,6 +73,7 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
         width={playerWidth}
         height={playerHeight}
         cropToFit={cropToFit}
+        ref={containerRef}
       >
         <Wrapper
           id="react-camera__wrapper"
@@ -65,7 +90,13 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
             cropToFit={cropToFit}
             ref={videoPlayerRef}
           />
+          <Canvas id="react-camera__canvas" ref={canvasRef} />
         </Wrapper>
+        <Button
+          id="react-camera__button"
+          ref={buttonRef}
+          onClick={handleTakeScreenshot}
+        />
       </Container>
     </>
   );

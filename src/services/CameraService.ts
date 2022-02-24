@@ -1,5 +1,9 @@
 import React from "react";
-import { CameraOptions, ResolutionString } from "../components/Camera/types";
+import {
+  CameraOptions,
+  ResolutionsToCrop,
+  ResolutionString,
+} from "../components/Camera/types";
 
 class CameraService {
   public start(
@@ -35,6 +39,64 @@ class CameraService {
           reject(error);
         })
     );
+  }
+
+  public takeScreenshot(
+    videoRef: React.RefObject<HTMLVideoElement>,
+    containerRef: React.RefObject<HTMLDivElement>,
+    canvasRef: React.RefObject<HTMLCanvasElement>,
+    cropToFit: ResolutionsToCrop | undefined
+  ): string | Error {
+    const video = videoRef.current;
+    const container = containerRef.current;
+    const canvas = canvasRef.current;
+
+    if (!video || !canvas || !container) {
+      return new Error("Video or canvas element not found.");
+    }
+
+    const ctx = canvas.getContext("2d");
+
+    if (!ctx || !ctx.canvas) {
+      return new Error("Canvas context not found.");
+    }
+
+    ctx.canvas.width = container.clientWidth;
+    ctx.canvas.height = container.clientHeight;
+
+    if (!cropToFit) {
+      ctx?.drawImage(video, 0, 0, ctx.canvas.width, ctx.canvas.height);
+    } else if (cropToFit === "3:4") {
+      const ratioResolutionToVideo = video.videoWidth / video.clientWidth;
+      const cropStartX = Math.floor(
+        ((video.clientWidth - container.clientWidth) / 2) *
+          ratioResolutionToVideo
+      );
+      const cropStartY = 0;
+      const cropWidth = Math.floor(
+        container.clientWidth * ratioResolutionToVideo
+      );
+      const cropHeight = Math.floor(
+        container.clientHeight * ratioResolutionToVideo
+      );
+
+      ctx?.drawImage(
+        video,
+        cropStartX,
+        cropStartY,
+        cropWidth,
+        cropHeight,
+        0,
+        0,
+        ctx.canvas.width,
+        ctx.canvas.height
+      );
+    }
+
+    const image = new Image();
+    image.src = canvas.toDataURL("image/jpeg");
+
+    return image.src;
   }
 
   private getUserMedia(): void {
