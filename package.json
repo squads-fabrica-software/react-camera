@@ -4,9 +4,9 @@
     "type": "git",
     "url": "https://github.com/squads-fabrica-software/react-camera"
   },
-  "name": "@squads/react-camera",
+  "name": "@squads-fabrica-software/react-camera",
   "description": "A camera component for React.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "files": [
