@@ -6,7 +6,7 @@
   },
   "name": "@squads/react-camera",
   "description": "A camera component for React.",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "files": [

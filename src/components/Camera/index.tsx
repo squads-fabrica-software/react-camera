@@ -1,33 +1,73 @@
-import React, { useEffect } from "react";
-import { styled } from "@stitches/react";
-// import { startCamera } from "../../services/startCamera";
+import React, { useEffect, useRef } from "react";
+import CameraService from "../../services/CameraService";
+import { CameraOptions } from "./types";
+import { Container, Wrapper, Video, globalStyles } from "./styles";
 
-interface Props {
-  width?: string | number;
-  height?: string | number;
-}
+const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
+  const videoPlayerRef = useRef<HTMLVideoElement>(null);
 
-const Camera = ({ width = "100%", height = "100%" }: Props) => {
+  const {
+    playerWidth,
+    playerMaxWidth,
+    playerHeight,
+    playerMaxHeight,
+    cropToFit,
+    onCameraStart,
+    onCameraError,
+  } = props;
+
+  const CameraServiceInstance = new CameraService();
+
+  const options = { ...props };
+
+  const initializeCamera = async () => {
+    if (!videoPlayerRef.current) {
+      return;
+    }
+
+    const result = await CameraServiceInstance.start(options, videoPlayerRef);
+
+    if (onCameraStart && result instanceof MediaStream) {
+      return onCameraStart(result);
+    }
+
+    if (onCameraError && result instanceof Error) {
+      return onCameraError(result);
+    }
+  };
+
+  globalStyles(); // sets stitches global styles
+
   useEffect(() => {
-    console.log("hello world");
-  }, []);
-
-  const Wrapper = styled("div", {
-    border: "10px solid red",
-    width,
-    height,
-  });
-
-  const Video = styled("video", {
-    backgroundColor: "#08EF99",
-    width: "100%",
-    height: "100%",
-  });
+    initializeCamera();
+  }, [videoPlayerRef.current]);
 
   return (
-    <Wrapper id="react-camera__wrapper">
-      <Video id="react-camera__video" autoPlay muted playsInline />
-    </Wrapper>
+    <>
+      <Container
+        id="react-camera__container"
+        width={playerWidth}
+        height={playerHeight}
+        cropToFit={cropToFit}
+      >
+        <Wrapper
+          id="react-camera__wrapper"
+          width={playerWidth}
+          height={playerHeight}
+          cropToFit={cropToFit}
+        >
+          <Video
+            id="react-camera__video"
+            width={playerWidth}
+            maxWidth={playerMaxWidth}
+            height={playerHeight}
+            maxHeight={playerMaxHeight}
+            cropToFit={cropToFit}
+            ref={videoPlayerRef}
+          />
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 
