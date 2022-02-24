@@ -38,7 +38,8 @@ function App() {
 
 Parameters accepted
 
-| Property             | Type  | Default | Description                                                                               |
-| -------------------- | ----- | ------- | ----------------------------------------------------------------------------------------- |
-| **onCameraStart():** | Event |         | Callback called when the camera is successfully started. Returns the media stream object. |
-| **onCameraError():** | Event |         | Callback called when there's an error while opening the camera. Returns the error.        |
+| Property             | Type  | Default | Description                                                                                   |
+| -------------------- | ----- | ------- | --------------------------------------------------------------------------------------------- |
+| **onCameraStart():** | Event |         | Callback called when the camera is successfully started. Returns the media stream object.     |
+| **onCameraError():** | Event |         | Callback called when there's an error while opening the camera. Returns the error.            |
+| **onScreenshot():**  | Event |         | Callback called when a screenshot is taken. Returns a base 64 string of the screenshot image. |
