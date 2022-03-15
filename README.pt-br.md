@@ -1,13 +1,15 @@
 # @squads-fabrica-software/react-camera
 
-### This is Camera component for React
+### Componente de câmera para Reactjs.
 
-## Requirements
+_Leia essa documentação em inglês: [English](README.md)._
+
+## Dependências
 
 - react >= 16.8.0
 - react-dom >= 16.8.0
 
-## Instalation
+## Instalação
 
 ```bash
 npm install --save @squads-fabrica-software/react-camera
@@ -17,11 +19,11 @@ npm install --save @squads-fabrica-software/react-camera
 yarn add @squads-fabrica-software/react-camera
 ```
 
-## Getting started
+## Introdução
 
-## Usage
+## Uso
 
-### Simple usage:
+### Uso simples:
 
 ```js
 import React from "react";
@@ -36,7 +38,7 @@ function App() {
 }
 ```
 
-### All props usage:
+### Uso com todas as propriedades:
 
 ```js
 import React from "react";
@@ -70,21 +72,21 @@ function App() {
 
 Parameters accepted
 
-| Property             | Type                       | Default         | Description                                                                                                    |
-| -------------------- | -------------------------- | --------------- | -------------------------------------------------------------------------------------------------------------- |
-| **onCameraStart():** | Event                      |                 | Callback called when the camera is successfully started. Returns the media stream object.                      |
-| **onCameraError():** | Event                      |                 | Callback called when there's an error while opening the camera. Returns the error.                             |
-| **onScreenshot():**  | Event                      |                 | Callback called when a screenshot is taken. Returns a base 64 string of the screenshot image.                  |
-| **idealFacingMode**  | String                     | Browser default | The ideal facing mode of the camera: environment (usually the back camera) or user (usually the front camera). |
-| **idealResolution**  | String                     | 1920x1080       | The ideal resolution for the camera. Format 999x999.                                                           |
-| **minResolution**    | String                     | 640x480         | The minimun allowed resolution for the camera. Format 999x999.                                                 |
-| **width**            | Number or "100%" or "auto" | "100%"          | Width of the camera.                                                                                           |
-| **maxWidth**         | Number or "100%" or "auto" | "100%"          | Maximum width of the camera.                                                                                   |
-| **height**           | Number or "100%" or "auto" | "100%"          | Height of the camera.                                                                                          |
-| **maxHeight**        | Number or "100%" or "auto" |                 | Maximum height of the camera.                                                                                  |
-| **cropToFit**        | "3:4"                      |                 | Centers and crops the camera to a 3:4 resolution based on the provived numeric width.                          |
-| **overlayImage**     | Image URL                  |                 | Places the provived overlay image on top of the camera with position absolute.                                 |
-| **overlayAlt**       | String                     | Empty string    | Text to be inserted into the alt attribute of the overlay image tag.                                           |
-| **overlayWidth**     | Number or "100%"           | "100%"          | Width of the overlay image.                                                                                    |
-| **overlayHeight**    | Number or "100%"           | "100%"          | Height of the overlay image.                                                                                   |
-| **overlayPosition**  | "center" or "cover"        | "cover"         | On "center" it centers the image with top and left 50%, on "cover" it places the image with top and left 0.    |
+| Propriedade          | Tipo                       | Default              | Descrição                                                                                                                    |
+| -------------------- | -------------------------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| **onCameraStart():** | Função                     |                      | Função callback chamada quando a câmera é iniciada com sucesso. Retorna o objeto de midia _(media stream)_.                  |
+| **onCameraError():** | Função                     |                      | Função callback chamada quando acontece um erro ao tentar abrir a câmera. Retorna o erro.                                    |
+| **onScreenshot():**  | Função                     |                      | Função chamada quando um _screenshot_ é tirado. Retorna uma string base64 da imagem.                                         |
+| **idealFacingMode**  | String                     | Default do navegador | Determina preferência por câmera frontal (_user_) ou câmera traseira (_environment_).                                        |
+| **idealResolution**  | String                     | 1920x1080            | Resolução ideal da câmera. Informar no formato 999x999.                                                                      |
+| **minResolution**    | String                     | 640x480              | Resolução mínima permitida para a câmera. Informar no formato 999x999.                                                       |
+| **width**            | Número ou "100%" ou "auto" | "100%"               | Largura em pixels da câmera a ser exibida na página.                                                                         |
+| **maxWidth**         | Número ou "100%" ou "auto" | "100%"               | Largura máxima em pixels da câmera a ser exibida na página.                                                                  |
+| **height**           | Número ou "100%" ou "auto" | "100%"               | Altura em pixels da câmera a ser exibida na página.                                                                          |
+| **maxHeight**        | Número ou "100%" ou "auto" |                      | Altura máxima em pixels da câmera a ser exibida na página.                                                                   |
+| **cropToFit**        | "3:4"                      |                      | Centraliza e faz um crop da câmera para a resolução 3:4, de acordo com a largura (_width_) numérica fornecida.               |
+| **overlayImage**     | URL da Imagem              |                      | Exibe a imagem fornecida em cima da câmera com _position absolute_.                                                          |
+| **overlayAlt**       | String                     | Empty string         | Texto a ser inserido no atributo _alt_ da tag da imagem de overlay.                                                          |
+| **overlayWidth**     | Número ou "100%"           | "100%"               | Largura em pixels da imagem de overlay.                                                                                      |
+| **overlayHeight**    | Número ou "100%"           | "100%"               | Altura em pixels da imagem de overlay.                                                                                       |
+| **overlayPosition**  | "center" ou "cover"        | "cover"              | Se "center", posiciona a imagem com _top_ e _left_ igual à 50%; se "cover", posiciona a imagem com _top_ e _left_ igual à 0. |
