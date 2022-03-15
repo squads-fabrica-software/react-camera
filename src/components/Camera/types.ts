@@ -3,16 +3,14 @@ type ResolutionHeight = number;
 
 export type ResolutionString = `${ResolutionWidth}x${ResolutionHeight}`;
 export type FacingModes = "user" | "environment";
-export type ResolutionsToCrop = "3:4" | "4:3";
+export type ResolutionsToCrop = "3:4";
 export type SupportedDimensions = number | "100%" | "auto";
 
 export interface CameraOptions {
-  playerWidth?: SupportedDimensions;
-  playerMaxWidth?: SupportedDimensions;
-  playerMinWidth?: SupportedDimensions;
-  playerHeight?: SupportedDimensions;
-  playerMaxHeight?: SupportedDimensions;
-  playerMinHeight?: SupportedDimensions;
+  width?: SupportedDimensions;
+  maxWidth?: SupportedDimensions;
+  height?: SupportedDimensions;
+  maxHeight?: SupportedDimensions;
   cropToFit?: ResolutionsToCrop;
   idealResolution?: ResolutionString;
   minResolution?: ResolutionString;
@@ -20,4 +18,9 @@ export interface CameraOptions {
   onCameraStart?: (mediaStream: MediaStream) => void;
   onCameraError?: (error: Error) => void;
   onScreenshot?: (screenshotBase64: string | Error) => void;
+  overlayImage?: string;
+  overlayAlt?: string;
+  overlayWidth?: number | "100%";
+  overlayHeight?: number | "100%";
+  overlayPosition?: "center" | "cover";
 }

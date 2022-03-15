@@ -7,6 +7,7 @@ import {
   Video,
   Canvas,
   Button,
+  Image,
   globalStyles,
 } from "./styles";
 
@@ -17,14 +18,19 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   const {
-    playerWidth,
-    playerMaxWidth,
-    playerHeight,
-    playerMaxHeight,
+    width,
+    maxWidth,
+    height,
+    maxHeight,
     cropToFit,
     onCameraStart,
     onCameraError,
     onScreenshot,
+    overlayImage,
+    overlayAlt,
+    overlayWidth,
+    overlayHeight,
+    overlayPosition = "cover",
   } = props;
 
   const CameraServiceInstance = new CameraService();
@@ -70,27 +76,36 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
     <>
       <Container
         id="react-camera__container"
-        width={playerWidth}
-        height={playerHeight}
+        width={width}
+        height={height}
         cropToFit={cropToFit}
         ref={containerRef}
       >
         <Wrapper
           id="react-camera__wrapper"
-          width={playerWidth}
-          height={playerHeight}
+          width={width}
+          height={height}
           cropToFit={cropToFit}
         >
           <Video
             id="react-camera__video"
-            width={playerWidth}
-            maxWidth={playerMaxWidth}
-            height={playerHeight}
-            maxHeight={playerMaxHeight}
+            width={width}
+            maxWidth={maxWidth}
+            height={height}
+            maxHeight={maxHeight}
             cropToFit={cropToFit}
             ref={videoPlayerRef}
           />
           <Canvas id="react-camera__canvas" ref={canvasRef} />
+          <Image
+            id="react-camera__overlay"
+            src={overlayImage}
+            alt={overlayAlt}
+            width={overlayWidth}
+            height={overlayHeight}
+            cropToFit={cropToFit}
+            overlayPosition={overlayPosition}
+          />
         </Wrapper>
         <Button
           id="react-camera__button"

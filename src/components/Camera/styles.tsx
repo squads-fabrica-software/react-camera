@@ -142,6 +142,47 @@ const Canvas = React.forwardRef((props: Props, ref) => {
   );
 });
 
+interface ImageProps extends Props {
+  alt?: string;
+  src?: string;
+  overlayPosition?: "center" | "cover";
+}
+
+const Image = React.forwardRef((props: ImageProps, ref) => {
+  const { id, alt, src, width, height, cropToFit, overlayPosition } = props;
+
+  console.log({ overlayPosition });
+
+  const position =
+    overlayPosition === "center"
+      ? {
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }
+      : {
+          top: 0,
+          left: 0,
+        };
+
+  const ImageComponent = styled("img", {
+    display: "block",
+    position: "absolute",
+    ...position,
+    width: width || "100%",
+    height: height || "100%",
+  });
+
+  return src ? (
+    <ImageComponent
+      id={id}
+      ref={ref as React.RefObject<HTMLImageElement>}
+      src={src}
+      alt={alt || ""}
+    />
+  ) : null;
+});
+
 interface ButtonProps extends Props {
   onClick: () => void;
 }
@@ -181,4 +222,4 @@ const globalStyles = globalCss({
   "*": { margin: 0, padding: 0, boxSizing: "border-box" },
 });
 
-export { Container, Wrapper, Video, Canvas, Button, globalStyles };
+export { Container, Wrapper, Video, Canvas, Button, Image, globalStyles };
