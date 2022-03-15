@@ -1,5 +1,7 @@
 # @squads-fabrica-software/react-camera
 
+*Read this in Brazilian Portuguese (PT-BR): [Português](README.pt-br.md).*
+
 ### This is Camera component for React
 
 ## Requirements
