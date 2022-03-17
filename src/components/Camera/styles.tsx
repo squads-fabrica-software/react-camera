@@ -63,6 +63,31 @@ const Container = React.forwardRef((props: ContainerProps, ref) => {
   );
 });
 
+interface FlashProps extends Props {
+  flashAnimation: boolean;
+  isOn: boolean;
+}
+
+const Flash: React.FC<FlashProps> = ({ flashAnimation, isOn, id }) => {
+  if (!flashAnimation) {
+    return null;
+  }
+
+  const FlashComponent = styled("div", {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    height: "100%",
+    width: "100%",
+    background: "rgba(200, 200, 200, 0.7)",
+    zIndex: 2,
+    transition: "opacity 0.9s ease-out",
+    opacity: isOn ? 1 : 0,
+  });
+
+  return <FlashComponent id={id} />;
+};
+
 const Wrapper: React.FC<Props> = ({
   width = "100%",
   maxWidth = "100%",
@@ -88,6 +113,7 @@ const Wrapper: React.FC<Props> = ({
   const WrapperComponent = styled("div", {
     ...styles,
     position: "relative",
+    zIndex: 1,
   });
 
   return <WrapperComponent id={id}>{children}</WrapperComponent>;
@@ -148,10 +174,8 @@ interface ImageProps extends Props {
   overlayPosition?: "center" | "cover";
 }
 
-const Image = React.forwardRef((props: ImageProps, ref) => {
-  const { id, alt, src, width, height, cropToFit, overlayPosition } = props;
-
-  console.log({ overlayPosition });
+const Image: React.FC<ImageProps> = (props: ImageProps) => {
+  const { id, alt, src, width, height, overlayPosition } = props;
 
   const position =
     overlayPosition === "center"
@@ -173,22 +197,16 @@ const Image = React.forwardRef((props: ImageProps, ref) => {
     height: height || "100%",
   });
 
-  return src ? (
-    <ImageComponent
-      id={id}
-      ref={ref as React.RefObject<HTMLImageElement>}
-      src={src}
-      alt={alt || ""}
-    />
-  ) : null;
-});
+  return src ? <ImageComponent id={id} src={src} alt={alt || ""} /> : null;
+};
 
 interface ButtonProps extends Props {
   onClick: () => void;
+  hidden: boolean;
 }
 
-const Button = React.forwardRef((props: ButtonProps, ref) => {
-  const { onClick, id } = props;
+const Button: React.FC<ButtonProps> = (props: ButtonProps) => {
+  const { onClick, id, hidden } = props;
 
   const ButtonComponent = styled("button", {
     width: 40,
@@ -206,20 +224,24 @@ const Button = React.forwardRef((props: ButtonProps, ref) => {
       background: "#FFFFFF",
       outline: "5px solid #FFFFFF6F",
     },
+    display: hidden ? "none" : "block",
+    zIndex: 9,
   });
 
-  return (
-    <ButtonComponent
-      id={id}
-      ref={ref as React.RefObject<HTMLButtonElement>}
-      type="button"
-      onClick={onClick}
-    />
-  );
-});
+  return <ButtonComponent id={id} type="button" onClick={onClick} />;
+};
 
 const globalStyles = globalCss({
   "*": { margin: 0, padding: 0, boxSizing: "border-box" },
 });
 
-export { Container, Wrapper, Video, Canvas, Button, Image, globalStyles };
+export {
+  Container,
+  Flash,
+  Wrapper,
+  Video,
+  Canvas,
+  Button,
+  Image,
+  globalStyles,
+};

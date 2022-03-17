@@ -1,6 +1,6 @@
 # @squads-fabrica-software/react-camera
 
-*Read this in Brazilian Portuguese (PT-BR): [Português](README.pt-br.md).*
+_Read this in Brazilian Portuguese (PT-BR): [Português](README.pt-br.md)._
 
 ### This is Camera component for React
 
@@ -90,3 +90,22 @@ Parameters accepted
 | **overlayWidth**     | Number or "100%"           | "100%"          | Width of the overlay image.                                                                                    |
 | **overlayHeight**    | Number or "100%"           | "100%"          | Height of the overlay image.                                                                                   |
 | **overlayPosition**  | "center" or "cover"        | "cover"         | On "center" it centers the image with top and left 50%, on "cover" it places the image with top and left 0.    |
+
+### CropToFit
+
+This feature aims to crop cameras with other resolutions to 3:4 resolution.
+For example, if you're on desktop with a webcam that has a landscape orientation and you want it to be on 3:4.
+The video player will center and hide the rest of the video player that overflows the 3:4 resolution.
+The image screenshot will also be cropped accordingly.
+
+_3:4 is the only resolution supported at the moment. Hopefully we'll be able to support other resolutions in the future._
+
+**Example:**
+
+Only the highlighted area will be shown in the screen to the user and the screenshot will be cropped acordingly.
+
+_What happens under the hood:_
+
+_How the user sees it on the screen:_
+
+_Cropped screenshot:_

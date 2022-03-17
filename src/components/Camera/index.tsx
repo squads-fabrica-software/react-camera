@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CameraService from "../../services/CameraService";
 import { CameraOptions } from "./types";
 import {
   Container,
+  Flash,
   Wrapper,
   Video,
   Canvas,
@@ -11,45 +12,50 @@ import {
   globalStyles,
 } from "./styles";
 
-const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
+const Camera: React.FC<CameraOptions> = ({
+  width,
+  maxWidth,
+  height,
+  maxHeight,
+  cropToFit,
+  onCameraStart,
+  onCameraError,
+  onScreenshot,
+  idealResolution,
+  minResolution,
+  idealFacingMode,
+  overlayImage,
+  overlayAlt,
+  overlayWidth,
+  overlayHeight,
+  overlayPosition = "cover",
+  btnHidden = false,
+  flashAnimation = true,
+}: CameraOptions) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const videoPlayerRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
-  const {
-    width,
-    maxWidth,
-    height,
-    maxHeight,
-    cropToFit,
-    onCameraStart,
-    onCameraError,
-    onScreenshot,
-    overlayImage,
-    overlayAlt,
-    overlayWidth,
-    overlayHeight,
-    overlayPosition = "cover",
-  } = props;
+  const [isFlashAnimationOn, setIsFlashAnimationOn] = useState(false);
 
   const CameraServiceInstance = new CameraService();
 
-  const options = { ...props };
+  const options = { idealResolution, minResolution, idealFacingMode };
 
   const initializeCamera = async () => {
     if (!videoPlayerRef.current) {
       return;
     }
 
-    const result = await CameraServiceInstance.start(options, videoPlayerRef);
-
-    if (onCameraStart && result instanceof MediaStream) {
-      return onCameraStart(result);
-    }
-
-    if (onCameraError && result instanceof Error) {
-      return onCameraError(result);
+    try {
+      const result = await CameraServiceInstance.start(options, videoPlayerRef);
+      if (onCameraStart && result instanceof MediaStream) {
+        return onCameraStart(result);
+      }
+    } catch (error) {
+      if (onCameraError) {
+        return onCameraError(error);
+      }
     }
   };
 
@@ -57,9 +63,13 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
 
   useEffect(() => {
     initializeCamera();
-  }, [videoPlayerRef.current]);
+  });
 
   const handleTakeScreenshot = () => {
+    if (flashAnimation) {
+      setIsFlashAnimationOn(true);
+    }
+
     if (onScreenshot) {
       const screenshot = CameraServiceInstance.takeScreenshot(
         videoPlayerRef,
@@ -68,7 +78,11 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
         cropToFit
       );
 
-      return onScreenshot(screenshot);
+      onScreenshot(screenshot);
+    }
+
+    if (flashAnimation) {
+      setTimeout(() => setIsFlashAnimationOn(false), 200);
     }
   };
 
@@ -81,6 +95,11 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
         cropToFit={cropToFit}
         ref={containerRef}
       >
+        <Flash
+          id="react-camera__flash"
+          flashAnimation={flashAnimation}
+          isOn={isFlashAnimationOn}
+        />
         <Wrapper
           id="react-camera__wrapper"
           width={width}
@@ -107,14 +126,15 @@ const Camera: React.FC<CameraOptions> = (props: CameraOptions) => {
             overlayPosition={overlayPosition}
           />
         </Wrapper>
+
         <Button
           id="react-camera__button"
-          ref={buttonRef}
           onClick={handleTakeScreenshot}
+          hidden={btnHidden}
         />
       </Container>
     </>
   );
 };
 
-export default Camera;
+export default React.memo(Camera);

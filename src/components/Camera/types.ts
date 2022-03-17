@@ -23,4 +23,6 @@ export interface CameraOptions {
   overlayWidth?: number | "100%";
   overlayHeight?: number | "100%";
   overlayPosition?: "center" | "cover";
+  btnHidden?: boolean;
+  flashAnimation?: boolean;
 }
