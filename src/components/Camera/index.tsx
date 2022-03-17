@@ -1,16 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import CameraService from "../../services/CameraService";
+import { start, takeScreenshot } from "../../services/CameraService";
 import { CameraOptions } from "./types";
-import {
-  Container,
-  Flash,
-  Wrapper,
-  Video,
-  Canvas,
-  Button,
-  Image,
-  globalStyles,
-} from "./styles";
+import useStyles from "./useStyles";
 
 const Camera: React.FC<CameraOptions> = ({
   width,
@@ -25,114 +16,150 @@ const Camera: React.FC<CameraOptions> = ({
   minResolution,
   idealFacingMode,
   overlayImage,
-  overlayAlt,
+  overlayAlt = "",
   overlayWidth,
   overlayHeight,
   overlayPosition = "cover",
   btnHidden = false,
   flashAnimation = true,
 }: CameraOptions) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const videoPlayerRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
 
+  const [videoPlayer, setVideoPlayer] = useState(null);
   const [isFlashAnimationOn, setIsFlashAnimationOn] = useState(false);
 
-  const CameraServiceInstance = new CameraService();
+  const videoOptions = { idealResolution, minResolution, idealFacingMode };
 
-  const options = { idealResolution, minResolution, idealFacingMode };
-
-  const initializeCamera = async () => {
-    if (!videoPlayerRef.current) {
-      return;
-    }
-
-    try {
-      const result = await CameraServiceInstance.start(options, videoPlayerRef);
-      if (onCameraStart && result instanceof MediaStream) {
-        return onCameraStart(result);
-      }
-    } catch (error) {
-      if (onCameraError) {
-        return onCameraError(error);
-      }
-    }
-  };
-
-  globalStyles(); // sets stitches global styles
-
-  useEffect(() => {
-    initializeCamera();
+  const {
+    containerStyles,
+    wrapperStyles,
+    videoStyles,
+    canvasStyles,
+    imageStyles,
+    buttonStyles,
+    flashStyles,
+  } = useStyles({
+    cropToFit,
+    width,
+    maxWidth,
+    height,
+    maxHeight,
+    overlayPosition,
+    overlayWidth,
+    overlayHeight,
+    btnHidden,
+    hasFlashAnimationOn: flashAnimation,
+    isFlashAnimationOn,
   });
 
-  const handleTakeScreenshot = () => {
-    if (flashAnimation) {
-      setIsFlashAnimationOn(true);
+  const startMedia = () => {
+    const canvas = canvasRef.current as unknown as HTMLCanvasElement;
+    if (!canvas) {
+      return onCameraError
+        ? onCameraError(new Error("Canvas not found"))
+        : null;
     }
 
-    if (onScreenshot) {
-      const screenshot = CameraServiceInstance.takeScreenshot(
-        videoPlayerRef,
-        containerRef,
-        canvasRef,
-        cropToFit
-      );
+    start(setVideoPlayer, onCameraError, onCameraStart, videoOptions);
+  };
 
-      onScreenshot(screenshot);
+  const verifyPermission = async () => {
+    navigator.permissions
+
+      // @ts-ignore next line
+      .query({ name: "camera" })
+      .then((permission) => {
+        if (permission.state === "granted") {
+          startMedia();
+        }
+
+        if (permission.state === "denied") {
+          return onCameraError
+            ? onCameraError(new Error("Permission denied"))
+            : null;
+        }
+
+        permission.addEventListener("change", () => {
+          switch (permission.state) {
+            case "denied":
+              onCameraError
+                ? onCameraError(new Error("Permission denied"))
+                : null;
+              break;
+            case "granted":
+              startMedia();
+              break;
+            case "prompt":
+              window.location.reload();
+              break;
+            default:
+              break;
+          }
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        if (
+          err.message ===
+          "'camera' (value of 'name' member of PermissionDescriptor) is not a valid value for enumeration PermissionName."
+        ) {
+          return startMedia();
+        }
+      });
+  };
+
+  useEffect(() => {
+    verifyPermission();
+  }, []);
+
+  const handleScreenshot = () => {
+    setIsFlashAnimationOn(true);
+    const result = takeScreenshot(
+      containerRef,
+      canvasRef,
+      videoPlayer,
+      cropToFit
+    );
+
+    if (result instanceof Error) {
+      return onCameraError ? onCameraError(result) : console.error(result);
     }
 
-    if (flashAnimation) {
-      setTimeout(() => setIsFlashAnimationOn(false), 200);
-    }
+    setTimeout(() => setIsFlashAnimationOn(false), 300);
+
+    return onScreenshot ? onScreenshot(result) : null;
   };
 
   return (
     <>
-      <Container
-        id="react-camera__container"
-        width={width}
-        height={height}
-        cropToFit={cropToFit}
+      <div
         ref={containerRef}
+        id="react-camera__container"
+        style={containerStyles}
       >
-        <Flash
-          id="react-camera__flash"
-          flashAnimation={flashAnimation}
-          isOn={isFlashAnimationOn}
-        />
-        <Wrapper
-          id="react-camera__wrapper"
-          width={width}
-          height={height}
-          cropToFit={cropToFit}
-        >
-          <Video
-            id="react-camera__video"
-            width={width}
-            maxWidth={maxWidth}
-            height={height}
-            maxHeight={maxHeight}
-            cropToFit={cropToFit}
-            ref={videoPlayerRef}
+        <div id="react-camera__flash" style={flashStyles} />
+        <div id="react-camera__wrapper" style={wrapperStyles}>
+          <video id="react-camera__video" style={videoStyles} />
+          <canvas
+            ref={canvasRef}
+            id="react-camera__canvas"
+            style={canvasStyles}
           />
-          <Canvas id="react-camera__canvas" ref={canvasRef} />
-          <Image
+          <img
             id="react-camera__overlay"
             src={overlayImage}
             alt={overlayAlt}
-            width={overlayWidth}
-            height={overlayHeight}
-            cropToFit={cropToFit}
-            overlayPosition={overlayPosition}
+            style={imageStyles}
           />
-        </Wrapper>
+        </div>
 
-        <Button
+        <button
           id="react-camera__button"
-          onClick={handleTakeScreenshot}
-          hidden={btnHidden}
+          onClick={handleScreenshot}
+          style={buttonStyles}
         />
-      </Container>
+      </div>
     </>
   );
 };
