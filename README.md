@@ -99,13 +99,3 @@ The video player will center and hide the rest of the video player that overflow
 The image screenshot will also be cropped accordingly.
 
 _3:4 is the only resolution supported at the moment. Hopefully we'll be able to support other resolutions in the future._
-
-**Example:**
-
-Only the highlighted area will be shown in the screen to the user and the screenshot will be cropped acordingly.
-
-_What happens under the hood:_
-
-_How the user sees it on the screen:_
-
-_Cropped screenshot:_

@@ -90,3 +90,12 @@ Parameters accepted
 | **overlayWidth**     | Número ou "100%"           | "100%"               | Largura em pixels da imagem de overlay.                                                                                      |
 | **overlayHeight**    | Número ou "100%"           | "100%"               | Altura em pixels da imagem de overlay.                                                                                       |
 | **overlayPosition**  | "center" ou "cover"        | "cover"              | Se "center", posiciona a imagem com _top_ e _left_ igual à 50%; se "cover", posiciona a imagem com _top_ e _left_ igual à 0. |
+
+### CropToFit
+
+Essa funcionalidade faz um "crop" da câmera para exibir na resolução 3:4.
+Por exemplo, digamos que você esteja no desktop utilizando uma webcam que tem orientação de paisagem, isto é, é mais larga que alta.
+Habilitando a funcionalidade de cropToFit = 3:4, o player de vídeo centraliza e esconde o resto do vídeo que _overflows_ a resolução 3:4.
+Então a câmera exibida para o usuário é neste formato/resolução 3:4, e o screenshot da imagem também recebe o crop de acordo, de modo que apenas o que ficou vísivel na exibição da câmera compõe a imagem.
+
+_A resolução 3:4 é a única suportada no momento. Esperamos poder implementar o suporte à outras resoluções no futuro._
