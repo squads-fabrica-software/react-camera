@@ -63,6 +63,7 @@ function App() {
       overlayHeight={400}
       overlayWidth={300}
       overlayPosition="center"
+      mirrorImage={true}
     />
   );
 }
@@ -90,6 +91,7 @@ Parameters accepted
 | **overlayWidth**     | Number or "100%"           | "100%"          | Width of the overlay image.                                                                                    |
 | **overlayHeight**    | Number or "100%"           | "100%"          | Height of the overlay image.                                                                                   |
 | **overlayPosition**  | "center" or "cover"        | "cover"         | On "center" it centers the image with top and left 50%, on "cover" it places the image with top and left 0.    |
+| **mirrorImage**      | boolean                    | true            | Mirror video image.                                                                                            |
 
 ### CropToFit
 

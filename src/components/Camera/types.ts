@@ -25,4 +25,5 @@ export interface CameraOptions {
   overlayPosition?: "center" | "cover";
   btnHidden?: boolean;
   flashAnimation?: boolean;
+  mirrorImage?: boolean;
 }

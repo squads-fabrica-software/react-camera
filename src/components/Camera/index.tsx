@@ -22,6 +22,7 @@ const Camera: React.FC<CameraOptions> = ({
   overlayPosition = "cover",
   btnHidden = false,
   flashAnimation = true,
+  mirrorImage = true,
 }: CameraOptions) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -51,6 +52,7 @@ const Camera: React.FC<CameraOptions> = ({
     btnHidden,
     hasFlashAnimationOn: flashAnimation,
     isFlashAnimationOn,
+    mirrorImage,
   });
 
   const startMedia = () => {

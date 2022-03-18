@@ -90,6 +90,7 @@ Parameters accepted
 | **overlayWidth**     | Número ou "100%"           | "100%"               | Largura em pixels da imagem de overlay.                                                                                      |
 | **overlayHeight**    | Número ou "100%"           | "100%"               | Altura em pixels da imagem de overlay.                                                                                       |
 | **overlayPosition**  | "center" ou "cover"        | "cover"              | Se "center", posiciona a imagem com _top_ e _left_ igual à 50%; se "cover", posiciona a imagem com _top_ e _left_ igual à 0. |
+| **mirrorImage**      | boolean                    | true                 | Faz espelhamento da imagem do vídeo.                                                                                         |
 
 ### CropToFit
 

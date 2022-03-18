@@ -18,6 +18,7 @@ const useStyles = ({
   btnHidden,
   hasFlashAnimationOn,
   isFlashAnimationOn,
+  mirrorImage,
 }: StyleProps) => {
   const resetingStyles = {
     margin: 0,
@@ -47,6 +48,23 @@ const useStyles = ({
     ...resetingStyles,
   } as React.CSSProperties;
 
+  const getVideoTransformProperty = (
+    cropToFit: "3:4" | undefined,
+    mirrorImage: boolean | undefined
+  ) => {
+    if (cropToFit === "3:4" && mirrorImage) {
+      return "translateX(-50%) rotateY(180deg)";
+    } else if (cropToFit === "3:4" && !mirrorImage) {
+      return "translateX(50%)";
+    } else if (cropToFit !== "3:4" && mirrorImage) {
+      return "rotateY(180deg)";
+    } else if (cropToFit !== "3:4" && !mirrorImage) {
+      return "none";
+    }
+
+    return "none";
+  };
+
   const videoStyles = {
     maxWidth: cropToFit === "3:4" ? "none" : maxWidth,
     width: cropToFit === "3:4" ? "auto" : width,
@@ -54,7 +72,7 @@ const useStyles = ({
     position: cropToFit === "3:4" ? "absolute" : "relative",
     top: "auto",
     left: cropToFit === "3:4" ? "50%" : "auto",
-    transform: cropToFit === "3:4" ? "translateX(-50%)" : "none",
+    transform: getVideoTransformProperty(cropToFit, mirrorImage),
     ...resetingStyles,
   } as React.CSSProperties;
 
