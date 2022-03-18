@@ -63,6 +63,7 @@ function App() {
       overlayHeight={400}
       overlayWidth={300}
       overlayPosition="center"
+      mirrorImage={true}
     />
   );
 }

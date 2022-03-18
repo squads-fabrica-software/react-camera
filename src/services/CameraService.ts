@@ -81,7 +81,6 @@ const start = (
 
       video.onloadedmetadata = function () {
         video.play().then(() => {
-          console.log("PLAY");
           setVideoPlayer(video);
           return onCameraStart ? onCameraStart(stream) : null;
         });
@@ -92,7 +91,7 @@ const start = (
         return onCameraError(err);
       }
 
-      console.log(err);
+      console.error(err);
       return null;
     });
 };
