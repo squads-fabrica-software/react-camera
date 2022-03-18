@@ -30,7 +30,7 @@ const useStyles = ({
     overflow: "hidden",
     position: "relative",
     width,
-    maxWidth: cropToFit === "3:4" ? "100% !important" : maxWidth,
+    maxWidth: cropToFit === "3:4" ? "100%" : maxWidth,
     height: cropToFit === "3:4" ? "auto" : height,
     maxHeight,
     aspectRatio: cropToFit === "3:4" ? "3 / 4" : "auto",
