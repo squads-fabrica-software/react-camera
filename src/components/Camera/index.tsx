@@ -67,48 +67,50 @@ const Camera: React.FC<CameraOptions> = ({
   };
 
   const verifyPermission = async () => {
-    navigator.permissions
-
-      // @ts-ignore next line
-      .query({ name: "camera" })
-      .then((permission) => {
-        if (permission.state === "granted") {
-          startMedia();
-        }
-
-        if (permission.state === "denied") {
-          return onCameraError
-            ? onCameraError(new Error("Permission denied"))
-            : null;
-        }
-
-        permission.addEventListener("change", () => {
-          switch (permission.state) {
-            case "denied":
-              onCameraError
-                ? onCameraError(new Error("Permission denied"))
-                : null;
-              break;
-            case "granted":
-              startMedia();
-              break;
-            case "prompt":
-              window.location.reload();
-              break;
-            default:
-              break;
+    //checks that the browser is not safari
+    if (navigator?.permissions?.query) {
+      navigator.permissions
+        // @ts-ignore next line
+        .query({ name: "camera" })
+        .then((permission) => {
+          if (permission.state === "granted" || permission.state === "prompt") {
+            startMedia();
+          }
+          if (permission.state === "denied") {
+            return onCameraError
+              ? onCameraError(new Error("Permission denied"))
+              : null;
+          }
+          permission.addEventListener("change", () => {
+            switch (permission.state) {
+              case "denied":
+                onCameraError
+                  ? onCameraError(new Error("Permission denied"))
+                  : null;
+                break;
+              case "granted":
+                startMedia();
+                break;
+              case "prompt":
+                window.location.reload();
+                break;
+              default:
+                break;
+            }
+          });
+        })
+        .catch((err) => {
+          console.error(err);
+          if (
+            err.message ===
+            "'camera' (value of 'name' member of PermissionDescriptor) is not a valid value for enumeration PermissionName."
+          ) {
+            return startMedia();
           }
         });
-      })
-      .catch((err) => {
-        console.error(err);
-        if (
-          err.message ===
-          "'camera' (value of 'name' member of PermissionDescriptor) is not a valid value for enumeration PermissionName."
-        ) {
-          return startMedia();
-        }
-      });
+    } else {
+      return startMedia();
+    }
   };
 
   useEffect(() => {
@@ -143,6 +145,7 @@ const Camera: React.FC<CameraOptions> = ({
         <div id="react-camera__flash" style={flashStyles} />
         <div id="react-camera__wrapper" style={wrapperStyles}>
           <video id="react-camera__video" style={videoStyles} />
+
           <canvas
             ref={canvasRef}
             id="react-camera__canvas"

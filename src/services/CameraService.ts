@@ -11,7 +11,7 @@ interface VideoOptions {
   idealFacingMode?: "user" | "environment";
 }
 
-const start = (
+const start = async (
   setVideoPlayer: Dispatch<SetStateAction<HTMLVideoElement | null>>,
   onCameraError: ((error: Error) => void) | undefined,
   onCameraStart: ((mediaStream: MediaStream) => void) | undefined,
@@ -22,8 +22,10 @@ const start = (
     navigator.getUserMedia || // @ts-ignore next line
     navigator.webkitGetUserMedia || // @ts-ignore next line
     navigator.mozGetUserMedia || // @ts-ignore next line
-    navigator.msGetUserMedia; // @ts-ignore next line
+    navigator.msGetUserMedia ||
+    navigator.mediaDevices.getUserMedia
 
+  console.log('isThereGetUserMedia ---- >', isThereGetUserMedia)
   if (!isThereGetUserMedia) {
     return onCameraError
       ? onCameraError(new Error("This browser doesn't support camera"))
@@ -64,7 +66,7 @@ const start = (
   video.setAttribute("muted", "");
   video.setAttribute("playsinline", "");
 
-  const constraints = getCameraConstraints(videoOptions);
+  const constraints = await getCameraConstraints(videoOptions);
 
   // tenta abrir a câmera de video
   navigator.mediaDevices
@@ -85,6 +87,10 @@ const start = (
           return onCameraStart ? onCameraStart(stream) : null;
         });
       };
+
+      setTimeout(() => {
+        video.style.display = 'block'
+      }, 1000);
     })
     .catch((err) => {
       if (onCameraError) {

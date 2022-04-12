@@ -69,10 +69,11 @@ const useStyles = ({
     maxWidth: cropToFit === "3:4" ? "none" : maxWidth,
     width: cropToFit === "3:4" ? "auto" : width,
     height: cropToFit === "3:4" ? "100%" : height,
-    position: cropToFit === "3:4" ? "absolute" : "relative",
+    position: cropToFit === "3:4" ? "relative" : "absolute",
     top: "auto",
     left: cropToFit === "3:4" ? "50%" : "auto",
     transform: getVideoTransformProperty(cropToFit, mirrorImage),
+    display: "none",
     ...resetingStyles,
   } as React.CSSProperties;
 
@@ -81,7 +82,7 @@ const useStyles = ({
   };
 
   const imageStyles = {
-    width: overlayWidth || width,
+    // width: overlayWidth || width,
     overlayHeight: overlayHeight || height,
     height,
     display: "block",
@@ -90,6 +91,7 @@ const useStyles = ({
     left: overlayPosition === "center" ? "50%" : 0,
     transform: overlayPosition === "center" ? "translate(-50%, -50%)" : "none",
     ...resetingStyles,
+    width: "100%",
   } as React.CSSProperties;
 
   const buttonStyles = {
