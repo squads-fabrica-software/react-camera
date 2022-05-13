@@ -6,7 +6,7 @@
   },
   "name": "@squads-fabrica-software/react-camera",
   "description": "A camera component for React.",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "main": "lib/cjs/index.js",
   "module": "lib/esm/index.js",
   "files": [

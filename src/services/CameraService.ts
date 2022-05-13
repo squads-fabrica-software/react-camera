@@ -23,9 +23,8 @@ const start = async (
     navigator.webkitGetUserMedia || // @ts-ignore next line
     navigator.mozGetUserMedia || // @ts-ignore next line
     navigator.msGetUserMedia ||
-    navigator.mediaDevices.getUserMedia
+    navigator.mediaDevices.getUserMedia;
 
-  console.log('isThereGetUserMedia ---- >', isThereGetUserMedia)
   if (!isThereGetUserMedia) {
     return onCameraError
       ? onCameraError(new Error("This browser doesn't support camera"))
@@ -89,7 +88,7 @@ const start = async (
       };
 
       setTimeout(() => {
-        video.style.display = 'block'
+        video.style.display = "block";
       }, 1000);
     })
     .catch((err) => {
@@ -184,36 +183,33 @@ const takeScreenshot = (
     return new Error("Video or canvas element not found.");
   }
 
-  ctx.canvas.width = container.clientWidth;
-  ctx.canvas.height = container?.clientHeight;
+  // ctx.canvas.width = container.clientWidth;
+  // ctx.canvas.height = container?.clientHeight;
 
-  if (!cropToFit) {
-    ctx?.drawImage(video, 0, 0, ctx.canvas.width, ctx.canvas.height);
-  } else if (cropToFit === "3:4") {
-    const ratioResolutionToVideo = video.videoWidth / video.clientWidth;
-    const cropStartX = Math.floor(
-      ((video.clientWidth - container.clientWidth) / 2) * ratioResolutionToVideo
-    );
-    const cropStartY = 0;
-    const cropWidth = Math.floor(
-      container.clientWidth * ratioResolutionToVideo
-    );
-    const cropHeight = Math.floor(
-      container.clientHeight * ratioResolutionToVideo
-    );
+  // ctx.drawImage(video, 0, 0, ctx.canvas.width, ctx.canvas.height);
 
-    ctx?.drawImage(
-      video,
-      cropStartX,
-      cropStartY,
-      cropWidth,
-      cropHeight,
-      0,
-      0,
-      ctx.canvas.width,
-      ctx.canvas.height
-    );
-  }
+  canvas.height = video.videoHeight;
+  canvas.width = video.videoWidth;
+
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+  // if (!cropToFit) {
+  //   ctx?.drawImage(video, 0, 0, ctx.canvas.width, ctx.canvas.height);
+  // } else if (cropToFit === "3:4") {
+  //   const ratioResolutionToVideo = video.videoWidth / video.clientWidth;
+  //   const cropStartX = Math.floor(
+  //     ((video.clientWidth - container.clientWidth) / 2) * ratioResolutionToVideo
+  //   );
+  //   const cropStartY = 0;
+  //   const cropWidth = Math.floor(
+  //     container.clientWidth * ratioResolutionToVideo
+  //   );
+  //   const cropHeight = Math.floor(
+  //     container.clientHeight * ratioResolutionToVideo
+  //   );
+
+  //   ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+  // }
 
   const image = new Image();
   image.src = canvas.toDataURL("image/jpeg");
